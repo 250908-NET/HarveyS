@@ -1,0 +1,14 @@
+pwd - print working directory
+ls - list files and directories
+cd - change directories
+cat - read files
+mkdir - make directory
+touch - update last modified info, but also makes file
+echo - repeat text, can repeat into files
+
+git add - adds changes to staging
+git commit - commits changes to the repository
+git push - pushes changes to remote repository
+git branch - creates a branch of the current repository
+git merge - merges two branches together
+git rebase - bases the current branch off of another branch, reordering versions
