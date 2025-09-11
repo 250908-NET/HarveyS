@@ -1,4 +1,6 @@
 using Serilog;
+using System.Text.RegularExpressions;
+
 
 
 var builder = WebApplication.CreateBuilder(args); //WebApplication is the class
@@ -455,15 +457,80 @@ app.MapGet("/password/strength/{a}", (string a) =>
     
 }); 
 // ---- CHALLENGE 8 ---- 
-/*
-app.MapGet("/", () => 
-{
-    "Hello World!"
 
+
+app.MapGet("/validate/email/{email}", (string email) => 
+{
+    //email with just 1 @ somewhere not at the ends of the email
+    string reg = @"^[^@]+@[^@]+\.[^@]+$";
+    return new
+    {
+        operation = "Validating email",
+        email = email,
+        Valid = Regex.IsMatch(email, reg)
+    };
+});     
+
+app.MapGet("/validate/phone/{phone}", (string phone) => 
+{
+    //a phone number in format of (xxx)xxxxxxx, xxx-xxx-xxxx, xxxxxxxxxx, with +xx at the front possible
+    string reg = @"^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$";
+    return new
+    {
+        Operation = "Validating number",
+        Number = phone,
+        Valid = Regex.IsMatch(phone, reg)
+    };
 }); 
 
-// ---- CHALLENGE 9 ---- 
+app.MapGet("/validate/creditcard/{number}", (long number, ILogger<Program> logger) => 
+{
+    long num = number;
+    long sum = 0;
+    long temp = 0;
+    long count = 1;
+    bool valid = false;
+    while(number > 0)
+    {   
+        if(count % 2 == 0) {
+            temp = (number % 10) * 2;
+            if(temp < 10) {
+                sum += temp;
+            } else {
+                temp = (temp) % 10;
+                sum += temp + 1;
+            }
+        } else {
+            sum += number % 10;
+        }
+        number = number / 10;
+        count++;
+    }
+    if(sum % 10 == 0) {
+        valid = true;
+    }
+    return new
+    {
+        Operation = "Validating credit card",
+        Card = num,
+        Valid = valid
+    };
+}); 
 
+app.MapGet("/validate/strongpassword/{password}", (string password) => 
+{
+    //10 digit password that requires an upercase, lowercase, special character, and a number
+    string reg = @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{10,}$";
+    return new
+    {
+        Operation = "Validating password",
+        password = password,
+        Valid = Regex.IsMatch(password, reg)
+    };
+});
+
+// ---- CHALLENGE 9 ---- 
+/*
 app.MapGet("/", () => 
 {
     "Hello World!"
@@ -477,7 +544,7 @@ app.MapGet("/", () =>
     "Hello World!"
 
 });  
-/*
+
 // ---- CHALLENGE 11 ----  
 
 app.MapGet("/", () => 
