@@ -163,9 +163,9 @@ app.MapGet("/text/palindrome/{a}", (string a) =>
     var emordnilap = new string(a.Reverse().ToArray());
 
     if(a == emordnilap.ToLower()) {
-        return Results.Ok(new { operation = "palindrome", text = a, result = true });
+        return Results.Ok(new { operation = "Palindrome", text = a, result = true });
     } else {
-        return Results.Ok(new { operation = "palindrome", text = a, result = false });
+        return Results.Ok(new { operation = "Palindrome", text = a, result = false });
     }
 });
 
@@ -186,7 +186,7 @@ app.MapGet("/numbers/fizzbuzz/{a}", (int a) =>
         else 
             ans += i + " ";
     }
-    return Results.Ok(new { operation = "fizzbuzz", count = a, result = ans});
+    return Results.Ok(new { operation = "Fizzbuzz", count = a, result = ans});
 }); 
 
 app.MapGet("/numbers/prime/{a}", (int a) =>
@@ -194,35 +194,35 @@ app.MapGet("/numbers/prime/{a}", (int a) =>
     int test = 0;
     for(int i = 2; i < a; i++) {
         if(a % i == 0 || a == 2)
-            return Results.Ok(new { operation = "prime", number = a, result = false});
+            return Results.Ok(new { operation = "Prime", number = a, result = false});
         test = i;
     }
-    return Results.Ok(new { operation = "prime", number = a, result = true});
+    return Results.Ok(new { operation = "Prime", number = a, result = true});
 });
 
-app.MapGet("/numbers/fibonacci/{count}", (int a) =>
+app.MapGet("/numbers/fibonacci/{a}", (int a) =>
 {
     string fib = "0";
     int before = 0;
     int now = 1;
-    for(int i = 0; i < a; i++) {
+    for(int i = 1; i < a; i++) {
         int next = before + now;
-        fib += " " + next;
+        fib += " " + now;
         before = now;
         now = next;
     }
-    return Results.Ok(new { operation = "fibonacci", number = a, result = fib});
+    return Results.Ok(new { operation = "Fibonacci", number = a, result = fib});
 });
 
-app.MapGet("/numbers/factor/{number}", (int a) =>
+app.MapGet("/numbers/factor/{a}", (int a) =>
 {
-    string factors = "0";
-    for(int i = 0; i < a; i++) {
+    string factors = "";
+    for(int i = 1; i < a; i++) {
         if(a % i == 0) {
             factors += " " + i;
         }
     }
-    return Results.Ok(new { operation = "factors", number = a, result = factors});
+    return Results.Ok(new { operation = "Factors", number = a, result = factors});
 }); 
 
 
@@ -232,48 +232,47 @@ app.MapGet("/date/today", () =>
 {
     return new
     {
-        operation = "Todays date",
-        date = DateTime.Today
+        operation = "Todays Date",
+        date = DateTime.Today.ToShortDateString()
     };
 
 }); 
 
-app.MapGet("/date/age/{date}", (int date) => 
-{   
-    return new
-    {
-        operation = "Todays date",
-        age = DateTime.Now - DateTime.date
-    };
-
-}); 
-
-app.MapGet("/date/daysbetween/{date1}/{date2}", (DateTime x, DateTime y) => 
+app.MapGet("/date/age/{x}", (int x) => 
 {
     return new
     {
-        operation = "Days between",
-        age = DateTime.x - DateTime.y
+        operation = "Age",
+        age = DateTime.Now.Year - x 
     };
 }); 
 
-app.MapGet("/date/weekday/{date}", (DateTime date) => 
+app.MapGet("/date/daysbetween/{x}/{y}", (string x, string y) => 
 {
     return new
     {
-        operation = "Day of the week",
-        day = date.DayOfWeek
+        operation = "Days Between",
+        days = DateTime.Parse(x) - DateTime.Parse(y)
     };
 }); 
+
+app.MapGet("/date/weekday/{x}", (string x) =>
+{
+    return new
+    {
+        operation = "Weekday",
+        day = DateTime.Parse(x).DayOfWeek.ToString()
+    };
+});
 
 // ---- CHALLENGE 5 ---- 
 
+var colorList = new List<string> { "red", "orange", "yellow", "green", "blue", "purple" };
 app.MapGet("/colors", () => 
 {
-    var colorList = new List<string> { "red", "orange", "yellow", "green", "blue", "purple" };
     return new
     {
-        operation = "Color list",
+        operation = "Color List",
         colors = colorList
     };
 
@@ -281,32 +280,96 @@ app.MapGet("/colors", () =>
 
 app.MapGet("/colors/random", () => 
 {
-    
-    "Hello World!"
+    var index = Random.Shared.Next(colorList.Count);
+    var rdmColor = colorList[index];
 
+    return new
+    {
+        operation = "Random Color",
+        randomColor = rdmColor
+    };
 }); 
 
-app.MapGet("/colors/search/{letter}", () => 
+app.MapGet("/colors/search/{a}", (char a) => 
 {
-    "Hello World!"
-
+    var resultList = new List<string> {};
+    foreach(string i in colorList) {
+        if(a == i[0]) {
+            resultList.Add(i);
+        }
+    }
+    return new
+    {
+        operation = "Search Color",
+        startingLetter = a,
+        result = resultList
+    };
 }); 
 
-app.MapGet("/colors/add/{color}", (string color) => 
+app.MapGet("/colors/add/{a}", (string a) => 
 {
-    "Hello World!"
-
+    colorList.Add(a);
+    return new
+    {
+        operation = "Add Color",
+        newColor = a,
+        newColorList = colorList
+    };
 }); 
 
-/*
 // ---- CHALLENGE 6 ---- 
 
-app.MapGet("/", () => 
+app.MapGet("/temp/celsius-to-fahrenheit/{a}", (double a) => 
 {
-    "Hello World!"
+    return new
+    {
+        operation = "C to F",
+        Celsius = a,
+        Fahrenheit = (a * 9/5) + 32
+    };
 
 }); 
 
+app.MapGet("/temp/fahrenheit-to-celsius/{a}", (double a) => 
+{
+    return new
+    {
+        operation = "F to C",
+        Fahrenheit = a,
+        Celsius = (a - 32) * 5/9
+    };
+}); 
+
+app.MapGet("/temp/kelvin-to-celsius/{a}", (double a) => 
+{
+    return new
+    {
+        operation = "K to C",
+        Kelvin = a,
+        Celsius = a - 273.15
+    };
+}); 
+
+app.MapGet("/temp/compare/{a}/{x}/{b}/{y}", (double a, char x, double b, char y) => 
+{   
+    if(x == y) {
+        if(a == b) {
+
+        } else if (a > b) {
+
+        } else if (a < b) {
+            
+        }
+    }
+    return new
+    {
+        operation = "Compare",
+        Temp1 = a + " of " + x,
+        Temp2 = b + " of " + y,
+        Result = "Temperature "
+    };
+}); 
+/*
 // ---- CHALLENGE 7 ---- 
 
 app.MapGet("/", () => 

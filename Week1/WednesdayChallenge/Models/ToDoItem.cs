@@ -9,20 +9,21 @@ public class ToDoItem
     public List()
     {
         ID = 0;
-        Title = "Air";
+        title = "Air";
         isCompleted = false;
         createdDate = DateTime.Today;
-
     }   
 
-    public List(int numberOfItems, List list)
+    public List(int ID, string title, bool isCompleted)
     {
-        this.numberOfItems = numberOfItems;
-        New List toDo = list;
+        this.ID = ID;
+        this.title = title;
+        this.isCompleted = isCompleted;
+        this.createdDate = DateTime.Today;
     }
 
-    /*
-    === TO-DO LIST MANAGER ===
+/*
+=== TO-DO LIST MANAGER ===
 1. Add new item
 2. View all items
 3. Mark item complete
