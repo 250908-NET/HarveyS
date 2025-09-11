@@ -1,15 +1,27 @@
+using Serilog;
+
+
 var builder = WebApplication.CreateBuilder(args); //WebApplication is the class
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
+
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger(); //read config from app settings
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) //isDevelopment checks if its development or production
 {
-    app.MapOpenApi();   
+    app.MapOpenApi(); 
+    app.UseSwagger();
+    app.UseSwaggerUI();  
 }
 
 app.UseHttpsRedirection();
@@ -372,33 +384,78 @@ app.MapGet("/temp/compare/{a}/{x}/{b}/{y}", (double a, char x, double b, char y)
 
 // ---- CHALLENGE 7 ---- 
 
-app.MapGet("/password/simple/{length}", () => 
+app.MapGet("/password/simple/{length}", (int length) => 
 {
+    string password = "";
+    string abc123 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for(int i = 0; i < length; i++) {
+        password += abc123[Random.Shared.Next(abc123.Length)];
+    }
+
+    return new
+    {
+        operation = "Simple Password",
+        Length = length,
+        Password = password
+    };
 
 }); 
 
-app.MapGet("/password/complex/{length}", () => 
+app.MapGet("/password/complex/{length}", (int length) => 
 {
-    
+    string password = "";
+    string abc123 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-";
+    for(int i = 0; i < length; i++) {
+        password += abc123[Random.Shared.Next(abc123.Length)];
+    }
+    return new
+    {
+        operation = "Complex Password",
+        Length = length,
+        Password = password
+    };
 }); 
 
-app.MapGet("/password/memorable/{words}", () => 
+app.MapGet("/password/memorable/{words}", (int words) => 
 {
-    
+    string memorable = "";
+    var wordList = new List<string> { "red", "orange", "yellow", "green", "blue", "purple", "insure", "person", "element", "inspector", "arise", "stake", "land", "ridge", "code", "publish", "unanimous", "explicit", "ally", "judge", "beard", "legend", "age", "suppress", "spontaneous" };
+    for(int i = 0; i < words; i++) {
+        memorable += wordList[Random.Shared.Next(wordList.Count)];
+    }
+    return new
+    {
+        operation = "Simple Password",
+        Length = words,
+        Password = memorable
+    };
 }); 
 
-app.MapGet("/password/strength/{password}", (string a) => 
+app.MapGet("/password/strength/{a}", (string a) => 
 {
+    string abcd = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     int strength = 0;
-    string builder = "";
-    for(int i = 0; i < a.length; i++) {
-        if(builder.Contains(current)) {
-
+    string letters = "";
+    string symbols = "";
+    for(int i = 0; i < a.Length; i++) {
+        if(!abcd.Contains(a[i])) {
+            symbols += a[i];
+            strength += 4;
+        } else if(!letters.Contains(a[i])) {
+            letters += a[i];
+            strength += 3;
         }
     }
+    return new
+    {
+        operation = "Password Strength",
+        Password = a,
+        Strength = a.Length + strength
+    };
+    
 }); 
 // ---- CHALLENGE 8 ---- 
-
+/*
 app.MapGet("/", () => 
 {
     "Hello World!"
