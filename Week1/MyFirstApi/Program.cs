@@ -358,7 +358,7 @@ app.MapGet("/temp/compare/{a}/{x}/{b}/{y}", (double a, char x, double b, char y)
         } else if (a > b) {
 
         } else if (a < b) {
-            
+
         }
     }
     return new
@@ -369,15 +369,34 @@ app.MapGet("/temp/compare/{a}/{x}/{b}/{y}", (double a, char x, double b, char y)
         Result = "Temperature "
     };
 }); 
-/*
+
 // ---- CHALLENGE 7 ---- 
 
-app.MapGet("/", () => 
+app.MapGet("/password/simple/{length}", () => 
 {
-    "Hello World!"
 
 }); 
 
+app.MapGet("/password/complex/{length}", () => 
+{
+    
+}); 
+
+app.MapGet("/password/memorable/{words}", () => 
+{
+    
+}); 
+
+app.MapGet("/password/strength/{password}", (string a) => 
+{
+    int strength = 0;
+    string builder = "";
+    for(int i = 0; i < a.length; i++) {
+        if(builder.Contains(current)) {
+
+        }
+    }
+}); 
 // ---- CHALLENGE 8 ---- 
 
 app.MapGet("/", () => 
@@ -401,7 +420,7 @@ app.MapGet("/", () =>
     "Hello World!"
 
 });  
-
+/*
 // ---- CHALLENGE 11 ----  
 
 app.MapGet("/", () => 
