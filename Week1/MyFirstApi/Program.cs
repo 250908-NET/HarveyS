@@ -1,5 +1,7 @@
 using Serilog;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc; // for [Annontations]
+ 
 
 
 var builder = WebApplication.CreateBuilder(args); //WebApplication is the class
@@ -325,9 +327,9 @@ app.MapGet("/colors/search/{a}", (char a) =>
         startingLetter = a,
         result = resultList
     };
-}); 
+});
 
-app.MapGet("/colors/add/{a}", (string a) => 
+app.MapPost("/colors/add/{a}", (string a) => 
 {
     colorList.Add(a);
     return new
@@ -457,7 +459,7 @@ app.MapGet("/password/strength/{a}", (string a) =>
         } else if(!letters.Contains(a[i])) {
             letters += a[i];
             strength += 3;
-        }
+        }   
     }
     return new
     {
@@ -587,13 +589,14 @@ app.MapGet("/convert/length/{value}/{fromUnit}/{toUnit}", (double value, string 
             break;
     }
     if(broke == true && fromUnit != toUnit) {
-        return Results.BadRequest(new { error = "Please correctly enter length units in lowercase" });
+        return Results.BadRequest(new { error = "Please correctly enter length units" });
     }
+    string ans = answer.ToString("F2");
     return Results.Ok(new {
         Operation = "Length conversion",
         From = fromUnit,
         To = toUnit,
-        Units = answer
+        Units = ans
     });
 }); 
 app.MapGet("/convert/weight/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
@@ -638,7 +641,7 @@ app.MapGet("/convert/weight/{value}/{fromUnit}/{toUnit}", (double value, string 
             break;
     }
     if(broke == true && fromUnit != toUnit) {
-        return Results.BadRequest(new { error = "Please correctly enter weight units in lowercase" });
+        return Results.BadRequest(new { error = "Please correctly enter weight units" });
     }
     string ans = answer.ToString("F2");
     return Results.Ok(new {
@@ -690,13 +693,14 @@ app.MapGet("/convert/volume/{value}/{fromUnit}/{toUnit}", (double value, string 
             break;
     }
     if(broke == true && fromUnit != toUnit) {
-        return Results.BadRequest(new { error = "Please correctly enter volume units in lowercase" });
+        return Results.BadRequest(new { error = "Please correctly enter volume units" });
     }
+    string ans = answer.ToString("F2");
     return Results.Ok(new {
         Operation = "Length conversion",
         From = fromUnit,
         To = toUnit,
-        Units = answer
+        Units = ans
     });
 
 }); 
@@ -773,11 +777,12 @@ app.MapDelete("/removeWeatherForecast/{date}", (DateOnly date, ILogger<Program> 
 // ---- CHALLENGE 11 ----  
 Random rand = new Random();
 int CPU = rand.Next(1, 100);
-app.MapGet("/game/guess-number/{number}", (int number) => 
+
+app.MapPost("/game/guess-number/", ([FromBody] int number) => 
 {   //incorrect implimentation, should be post and "session"
     string response = "";
     if(CPU == number) {
-        response = "You got it!";
+        response = "You got it! Try again :)";
         CPU = rand.Next(1, 100);
     } else if(CPU < number) {
         response = "Lower :/";
@@ -790,7 +795,6 @@ app.MapGet("/game/guess-number/{number}", (int number) =>
         Guess = number,
         Result = response
     };
-
 });
 
 app.MapGet("/game/rock-paper-scissors/{choice}", (string choice) => 
@@ -835,7 +839,6 @@ app.MapGet("/game/dice/{sides}/{count}", (int sides, int count) =>
         Operation = "Dice roll: " + count + " die with " + sides + " sides have been rolled!",
         Rolls = diceList
     };
-
 });
 
 app.MapGet("/game/coin-flip/{count}", (int count) => 
@@ -865,4 +868,3 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)//String
 record Forecast(DateOnly date, int TemperatureC, string? Summary) {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
-
