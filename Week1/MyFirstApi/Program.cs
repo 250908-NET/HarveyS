@@ -2,7 +2,6 @@ using Serilog;
 using System.Text.RegularExpressions;
 
 
-
 var builder = WebApplication.CreateBuilder(args); //WebApplication is the class
 
 // Add services to the container.
@@ -79,7 +78,9 @@ app.MapGet("/number", () =>
     return 10;
 }); 
 
-//app.MapGet("/number2", newval()); 
+// -------------------- Challenges of tribulation --------------------
+
+
 
 // ----     CHALLENGE 1 ----
 app.MapGet("/calculator/add/{a}/{b}", (int a, int b) =>
@@ -125,6 +126,8 @@ app.MapGet("/calculator/divide/{a}/{b}", (int a, int b) =>
     }
 
 });
+
+
 
 // ---- CHALLENGE 2 ---- 
 
@@ -183,6 +186,8 @@ app.MapGet("/text/palindrome/{a}", (string a) =>
     }
 });
 
+
+
 // ---- CHALLENGE 3 ---- 
 
 app.MapGet("/numbers/fizzbuzz/{a}", (int a) =>
@@ -240,6 +245,7 @@ app.MapGet("/numbers/factor/{a}", (int a) =>
 }); 
 
 
+
 // ---- CHALLENGE 4 ---- 
 
 app.MapGet("/date/today", () => 
@@ -278,6 +284,8 @@ app.MapGet("/date/weekday/{x}", (string x) =>
         day = DateTime.Parse(x).DayOfWeek.ToString()
     };
 });
+
+
 
 // ---- CHALLENGE 5 ---- 
 
@@ -330,6 +338,8 @@ app.MapGet("/colors/add/{a}", (string a) =>
         newColorList = colorList
     };
 }); 
+
+
 
 // ---- CHALLENGE 6 ---- 
 
@@ -384,6 +394,8 @@ app.MapGet("/temp/compare/{a}/{x}/{b}/{y}", (double a, char x, double b, char y)
     };
 }); 
 
+
+
 // ---- CHALLENGE 7 ---- 
 
 app.MapGet("/password/simple/{length}", (int length) => 
@@ -421,13 +433,13 @@ app.MapGet("/password/complex/{length}", (int length) =>
 app.MapGet("/password/memorable/{words}", (int words) => 
 {
     string memorable = "";
-    var wordList = new List<string> { "red", "orange", "yellow", "green", "blue", "purple", "insure", "person", "element", "inspector", "arise", "stake", "land", "ridge", "code", "publish", "unanimous", "explicit", "ally", "judge", "beard", "legend", "age", "suppress", "spontaneous" };
+    var wordList = new List<string> { "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Insure", "Person", "Element", "Inspector", "Arise", "Stake", "Land", "Ridge", "Code", "Publish", "Unanimous", "Explicit", "Ally", "Judge", "Beard", "Legend", "Age", "Suppress", "Spontaneous" };
     for(int i = 0; i < words; i++) {
         memorable += wordList[Random.Shared.Next(wordList.Count)];
     }
     return new
     {
-        operation = "Simple Password",
+        operation = "Memorable words",
         Length = words,
         Password = memorable
     };
@@ -456,6 +468,8 @@ app.MapGet("/password/strength/{a}", (string a) =>
     };
     
 }); 
+
+
 
 // ---- CHALLENGE 8 ---- 
 
@@ -529,8 +543,9 @@ app.MapGet("/validate/strongpassword/{password}", (string password) =>
     };
 });
 
-// ---- CHALLENGE 9 ---- 
 
+
+// ---- CHALLENGE 9 ---- 
 
 app.MapGet("/convert/length/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
 {
@@ -698,7 +713,7 @@ app.MapGet("/convert/list-units/{type}", (string type) =>
     } else if (type == "volume") {
         ans = volume;
     } else {
-        return Results.BadRequest(new { error = "Please enter length, weight, or volume" });
+        return Results.BadRequest(new { error = "Please correctly enter length, weight, or volume" });
     }
     return Results.Ok(new {
         Operation = "List units",
@@ -707,27 +722,131 @@ app.MapGet("/convert/list-units/{type}", (string type) =>
     });
 
 }); 
-/*
+
+
 // ---- CHALLENGE 10 ----
 
-app.MapGet("/", () => 
+List<Forecast> forecasts = new List<Forecast>();
+DateOnly date1 = new DateOnly(2025, 10, 10);
+DateOnly date2 = new DateOnly(2023, 3, 5);
+DateOnly date3 = new DateOnly(2023, 12, 9);
+forecasts.Add(new Forecast(date1, 0, "Chilly"));
+forecasts.Add(new Forecast(date2, 30, "Hot"));
+forecasts.Add(new Forecast(date3, 60, "Melting"));
+app.MapGet("/getWeatherForecast", () => 
 {
-    "Hello World!"
+    return new
+    {
+        Operation = "Get Forecasts",
+        Forecasts = forecasts
+    };
+});
 
-});  
+app.MapGet("/addWeatherForecast/{date}/{temperatureC}/{summary}", (DateOnly date, int temperatureC, string summary) => 
+{
+    forecasts.Add(new Forecast(date, temperatureC, summary));
+    
+    return new
+    {
+        Operation = "Add Forecast",
+        Forecasts = forecasts
+    };
+});
+
+app.MapGet("/removeWeatherForecast/{date}", (DateOnly date, ILogger<Program> logger) => 
+{
+    foreach(Forecast i in forecasts) {
+            logger.LogInformation(i.date + " ");
+        if(i.date == date) {
+            logger.LogInformation(i.date + " ");
+            forecasts.Remove(i);
+        }
+    }
+    return new
+    {
+        Operation = "Delete Forecast",
+        Forecasts = forecasts
+    };
+});
+
 
 // ---- CHALLENGE 11 ----  
 
-app.MapGet("/", () => 
+app.MapGet("/game/guess-number", () => 
 {
-    "Hello World!"
 
-}); 
-*/
+});
+
+app.MapGet("/game/rock-paper-scissors/{choice}", (string choice) => 
+{
+    int poison = 0;//pick your poison
+    string result = "";
+    int CPU = Random.Shared.Next(1, 4);
+    if(choice == "rock") {
+        poison = 1;
+    } else if (choice == "paper") {
+        poison = 2;
+    } else if (choice == "scissors") {
+        poison = 3;
+    }
+    if(CPU == poison) {
+        result = "Tied!";
+    } else if (CPU == 1 && poison == 2){
+        result = "You win!";
+    } else if (CPU == 2 && poison == 3){
+        result = "You win!";
+    } else if (CPU == 3 && poison == 1){
+        result = "You win!";
+    } else {
+        result = "You lose :(";
+    }
+    return new
+    {
+        Operation = "Rock-Paper-Scissors!",
+        Result = result
+    };
+
+});
+
+app.MapGet("/game/dice/{sides}/{count}", (int sides, int count) => 
+{
+    var diceList = new List<int> {};
+    for(int i = 0; i < count; i++) {
+        diceList.Add(Random.Shared.Next(1, sides + 1));
+    }
+    return new
+    {
+        Operation = "Dice roll: " + count + " die with " + sides + " sides have been rolled!",
+        Rolls = diceList
+    };
+
+});
+
+app.MapGet("/game/coin-flip/{count}", (int count) => 
+{
+    var coinList = new List<string> {};
+    for(int i = 0; i < count; i++) {
+        if(Random.Shared.Next(0, 2) == 0) {
+            coinList.Add("Heads");
+        } else {
+            coinList.Add("Tails");
+        }
+    }
+    return new
+    {
+        Operation = "Coin flip",
+        Flips = coinList
+    };
+});
+
 app.Run();//tells it to run and await its purpose, comes from web application class at the top
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)//String? = nullable
 {
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+record Forecast(DateOnly date, int TemperatureC, string? Summary) {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
