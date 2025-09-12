@@ -456,8 +456,8 @@ app.MapGet("/password/strength/{a}", (string a) =>
     };
     
 }); 
-// ---- CHALLENGE 8 ---- 
 
+// ---- CHALLENGE 8 ---- 
 
 app.MapGet("/validate/email/{email}", (string email) => 
 {
@@ -530,13 +530,184 @@ app.MapGet("/validate/strongpassword/{password}", (string password) =>
 });
 
 // ---- CHALLENGE 9 ---- 
-/*
-app.MapGet("/", () => 
+
+
+app.MapGet("/convert/length/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
 {
-    "Hello World!"
+    double answer = value;
+    bool broke = false;
+    switch(fromUnit)
+    {
+        case "meters":
+            if(toUnit == "feet") {
+                answer = value * 3.28;
+                break;
+            } else if(toUnit == "inches") {
+                answer = value * 39.37;
+                break;
+            }
+            broke = true;
+            break;
+        case "feet":
+            if(toUnit == "meters") {
+                answer = value / 3.28;
+                break;
+            } else if(toUnit == "inches") {
+                answer = value * 12;
+                break;
+            }
+            broke = true;
+            break;
+        case "inches":
+            if(toUnit == "feet") {
+                answer = value / 12;
+                break;
+            } else if(toUnit == "meters") {
+                answer = value / 39.37;
+                break;
+            }
+            broke = true;
+            break;
+        default:
+            broke = true;
+            break;
+    }
+    if(broke == true && fromUnit != toUnit) {
+        return Results.BadRequest(new { error = "Please correctly enter length units in lowercase" });
+    }
+    return Results.Ok(new {
+        Operation = "Length conversion",
+        From = fromUnit,
+        To = toUnit,
+        Units = answer
+    });
+}); 
+app.MapGet("/convert/weight/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
+{
+    //kg, lbs, ounces)
+    double answer = value;
+    bool broke = false;
+    switch(fromUnit)
+    {
+        case "kg":
+            if(toUnit == "lbs") {
+                answer = value * 2.2;
+                break;
+            } else if(toUnit == "ounces") {
+                answer = value * 35.27;
+                break;
+            }
+            broke = true;
+            break;
+        case "lbs":
+            if(toUnit == "kg") {
+                answer = value / 2.2;
+                break;
+            } else if(toUnit == "ounces") {
+                answer = value * 16;
+                break;
+            }
+            broke = true;
+            break;
+        case "ounces":
+            if(toUnit == "lbs") {
+                answer = value / 16;
+                break;
+            } else if(toUnit == "kg") {
+                answer = value / 35.27;
+                break;
+            }
+            broke = true;
+            break;
+        default:
+            broke = true;
+            break;
+    }
+    if(broke == true && fromUnit != toUnit) {
+        return Results.BadRequest(new { error = "Please correctly enter weight units in lowercase" });
+    }
+    return Results.Ok(new {
+        Operation = "Weight conversion",
+        From = fromUnit,
+        To = toUnit,
+        Units = answer
+    });
+}); 
+app.MapGet("/convert/volume/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
+{
+    //liters, gallons, cups
+    double answer = value;
+    bool broke = false;
+    switch(fromUnit)
+    {
+        case "liters":
+            if(toUnit == "gallons") {
+                answer = value / 4.55;
+                break;
+            } else if(toUnit == "cups") {
+                answer = value * 3.52;
+                break;
+            }
+            broke = true;
+            break;
+        case "gallons":
+            if(toUnit == "liters") {
+                answer = value * 4.55;
+                break;
+            } else if(toUnit == "cups") {
+                answer = value * 16;
+                break;
+            }
+            broke = true;
+            break;
+        case "cups":
+            if(toUnit == "gallons") {
+                answer = value / 16;
+                break;
+            } else if(toUnit == "liters") {
+                answer = value / 3.52;
+                break;
+            }
+            broke = true;
+            break;
+        default:
+            broke = true;
+            break;
+    }
+    if(broke == true && fromUnit != toUnit) {
+        return Results.BadRequest(new { error = "Please correctly enter volume units in lowercase" });
+    }
+    return Results.Ok(new {
+        Operation = "Length conversion",
+        From = fromUnit,
+        To = toUnit,
+        Units = answer
+    });
 
 }); 
+app.MapGet("/convert/list-units/{type}", (string type) => 
+{
+    string ans;
+    string length = "Meters, Feet, Inches";
+    string weight = "Kgs, Lbs, Ounces";
+    string volume = "Liters, Gallons, Cups";
+    if(type ==  "length") {
+        ans = length;
+    } else if (type == "weight") {
+        ans = weight;
+    } else if (type == "volume") {
+        ans = volume;
+    } else {
+        return Results.BadRequest(new { error = "Please enter length, weight, or volume" });
+    }
+    return Results.Ok(new {
+        Operation = "List units",
+        Type = type,
+        Units = ans
+    });
 
+}); 
+/*
 // ---- CHALLENGE 10 ----
 
 app.MapGet("/", () => 
