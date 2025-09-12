@@ -640,11 +640,12 @@ app.MapGet("/convert/weight/{value}/{fromUnit}/{toUnit}", (double value, string 
     if(broke == true && fromUnit != toUnit) {
         return Results.BadRequest(new { error = "Please correctly enter weight units in lowercase" });
     }
+    string ans = answer.ToString("F2");
     return Results.Ok(new {
         Operation = "Weight conversion",
         From = fromUnit,
         To = toUnit,
-        Units = answer
+        Units = ans
     });
 }); 
 app.MapGet("/convert/volume/{value}/{fromUnit}/{toUnit}", (double value, string fromUnit, string toUnit) => 
@@ -752,19 +753,19 @@ app.MapGet("/addWeatherForecast/{date}/{temperatureC}/{summary}", (DateOnly date
     };
 });
 
-app.MapGet("/removeWeatherForecast/{date}", (DateOnly date, ILogger<Program> logger) => 
+app.MapDelete("/removeWeatherForecast/{date}", (DateOnly date, ILogger<Program> logger) => 
 {
     foreach(Forecast i in forecasts) {
             logger.LogInformation(i.date + " ");
         if(i.date == date) {
             logger.LogInformation(i.date + " ");
             forecasts.Remove(i);
+            break;
         }
     }
     return new
     {
-        Operation = "Delete Forecast",
-        Forecasts = forecasts
+        Operation = "Delete"
     };
 });
 
