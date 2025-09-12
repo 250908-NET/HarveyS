@@ -289,7 +289,7 @@ app.MapGet("/date/weekday/{x}", (string x) =>
 
 // ---- CHALLENGE 5 ---- 
 
-var colorList = new List<string> { "red", "orange", "yellow", "green", "blue", "purple" };
+var colorList = new List<string> { "Red", "Orange", "Yellow", "Green", "Blue", "Purple" };
 app.MapGet("/colors", () => 
 {
     return new
@@ -297,7 +297,6 @@ app.MapGet("/colors", () =>
         operation = "Color List",
         colors = colorList
     };
-
 }); 
 
 app.MapGet("/colors/random", () => 
@@ -771,15 +770,31 @@ app.MapGet("/removeWeatherForecast/{date}", (DateOnly date, ILogger<Program> log
 
 
 // ---- CHALLENGE 11 ----  
-
-app.MapGet("/game/guess-number", () => 
-{
+Random rand = new Random();
+int CPU = rand.Next(1, 100);
+app.MapGet("/game/guess-number/{number}", (int number) => 
+{   //incorrect implimentation, should be post and "session"
+    string response = "";
+    if(CPU == number) {
+        response = "You got it!";
+        CPU = rand.Next(1, 100);
+    } else if(CPU < number) {
+        response = "Lower :/";
+    } else if(CPU > number) {
+        response = "Higher :<";
+    }
+    return new
+    {
+        Operation = "Guess the number!",
+        Guess = number,
+        Result = response
+    };
 
 });
 
 app.MapGet("/game/rock-paper-scissors/{choice}", (string choice) => 
 {
-    int poison = 0;//pick your poison
+    int poison = 0; //pick your poison
     string result = "";
     int CPU = Random.Shared.Next(1, 4);
     if(choice == "rock") {
