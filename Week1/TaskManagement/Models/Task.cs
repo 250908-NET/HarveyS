@@ -19,7 +19,7 @@ public class Tasc
     [MaxLength(100)]
     public string title { get; set; }
     [MaxLength(500)]
-    public string description { get; set; }
+    public string? description { get; set; }
     public bool isCompleted { get; set; }
     public Prio priority { get; set; }
     public DateTime? dueDate { get; set; }
@@ -28,7 +28,7 @@ public class Tasc
 
     public Tasc()
     {
-        ID = Interlocked.Increment(ref currentId);
+        this.ID = currentId;
         title = "Default Task";
         description = "Does stuff";
         isCompleted = false;
@@ -38,7 +38,7 @@ public class Tasc
 
     }
 
-    public Tasc(string title, string description, bool isCompleted, Prio priority, DateTime dueDate) //priority priority, DateTime? dueDate
+    public Tasc(string title, string description, bool isCompleted, Prio priority, DateTime? dueDate) //priority priority, DateTime? dueDate
     {
         this.ID = Interlocked.Increment(ref currentId);
         this.title = title;
