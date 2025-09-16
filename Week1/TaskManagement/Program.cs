@@ -27,30 +27,42 @@ app.UseHttpsRedirection();
 
 TaskService service = new TaskService();
 
-app.MapGet("/api/tasks", () =>
+//Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
+app.MapGet("/api/tasks", ([FromBody] string sort, ILogger<Program> logger) =>
 {
-    if(service.listItems() == null)
-    {
-        Results.BadRequest(new { success = false, data = "No tasks to list", message = "Operation failed" });
+    if(sort != "priority" && sort != "Priority" && sort != "Completed" && sort != "completed" && sort != "dueDate" && sort != "duedate") {
+        return Results.BadRequest(new { success = false, data = "Invalid sort method [Priority, Completed, dueDate]", message = "Operation failed" });
     }
-    return Results.Ok(new { success = true, data = service.listItems(), message = "Operation completed successfully"});
+    if(service.listItems(sort) == null)
+    {
+        return Results.BadRequest(new { success = false, data = "No tasks to list", message = "Operation failed" });
+    }
+    return Results.Ok(new { success = true, data = service.listItems(sort), message = "Operation completed successfully"});
 });
 
+//Get specific task by ID
 app.MapGet("/api/tasks/{id}", (int id) => 
-{ 
+{
+    if(service.findTask(id) == null) {
+        return Results.BadRequest(new { success = false, data = "ID not found", message = "Operation failed" });
+    }
     return Results.Ok(new { success = true, data = service.findTask(id), message = "Operation completed successfully"});
 });
 
-app.MapPost("/api/tasks", () => 
+//Create new task
+app.MapPost("/api/tasks", ([FromBody] int id, ILogger<Program> logger) => 
 { 
-    return Results.Ok(new { success = true, data = service.listItems(), message = "Operation completed successfully"});
+    logger.LogInformation("Sort is: " + id);
+    return Results.Ok(new { success = true, data = service.updateTask(id), message = "Operation completed successfully"});
 });
 
+//Update existing task
 app.MapPut("/api/tasks/{id}", (int id) => 
 { 
-    return Results.Ok(new { success = true, data = service.listItems(), message = "Operation completed successfully"});
+    return Results.Ok(new { success = true, data = service.updateTask(id), message = "Operation completed successfully"});
 });
 
+//Delete task
 app.MapDelete("/api/tasks/{id}", (int id) => 
 { 
     return Results.Ok(new { success = true, data = service.deleteTask(id), message = "Operation completed successfully"});
