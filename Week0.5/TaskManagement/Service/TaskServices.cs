@@ -14,21 +14,22 @@ public class TaskService
 
     public List<Tasc> listItems(string sort)
     {
+        List<Tasc> sortList = new List<Tasc>();
         bool isEmpty = !theList.Any();
         if(isEmpty)
         {
             return null;
         }
         if((sort == "priority" || sort == "Priority" ) && theList.Count() >= 2) {
-            theList.OrderBy(theList => theList.priority);
+            sortList = theList.OrderBy(theList => theList.priority).ToList();
+        } else if((sort == "completed" || sort == "Completed" ) && theList.Count() >= 2) {
+            sortList = theList.OrderBy(theList => theList.isCompleted).ToList();
+        } else if((sort == "duedate" || sort == "dueDate" ) && theList.Count() >= 2) {
+            sortList = theList.OrderBy(theList => theList.dueDate).ToList();
+        } else {
+            return theList;
         }
-        if((sort == "completed" || sort == "Completed" ) && theList.Count() >= 2) {
-            theList.OrderBy(theList => theList.isCompleted);
-        }
-        if((sort == "duedate" || sort == "dueDate" ) && theList.Count() >= 2) {
-            theList.OrderBy(theList => theList.dueDate);
-        }
-        return theList;
+        return sortList;
     }
 
     public Tasc findTask(int id)
