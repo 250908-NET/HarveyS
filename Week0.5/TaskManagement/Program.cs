@@ -52,7 +52,9 @@ app.MapGet("/api/tasks/{id}", (int id) =>
 //Create new task
 app.MapPost("/api/tasks", (Tasc task) => 
 {
-    
+    if(task == null) {
+        return Results.BadRequest(new { success = false, data = "Invalid task arguments", message = "Operation failed" });
+    }
     return Results.Ok(new { success = true, data = service.addToList(task), message = "Operation completed successfully"});
 });
 
