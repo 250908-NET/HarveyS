@@ -27,10 +27,10 @@ app.UseHttpsRedirection();
 
 TaskService service = new TaskService();
 
-app.MapGet("/", () => 
-{
-    return "hello world!";
-});
+
+
+// Endpoints!!
+
 //Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
 app.MapGet("/api/tasks", ([FromQuery] string? sort) =>
 {
@@ -59,7 +59,10 @@ app.MapPost("/api/tasks", (Tasc task) =>
     if(task == null) {
         return Results.BadRequest(new { success = false, data = "Invalid task arguments", message = "Operation failed" });
     }
-    return Results.Ok(new { success = true, data = service.addToList(task), message = "Operation completed successfully"});
+    if(service.isValidDate(task.dueDate)) {
+        return Results.Ok(new { success = true, data = service.addToList(task), message = "Operation completed successfully"});
+    }
+    return Results.BadRequest(new { success = false, data = "Invalid task arguments", message = "Operation failed" });
 });
 
 //Update existing task
@@ -69,7 +72,7 @@ app.MapPut("/api/tasks/{id}", (int id, [FromBody] Tasc task) =>
         return Results.BadRequest(new { success = false, data = "ID not found", message = "Operation failed" });
     }
 
-    var updated = service.updateTasc(id, title: task.title, description: task.description, isCompleted: task.isCompleted, priority: task.priority, dueDate: task.dueDate?.ToString());
+    var updated = service.updateTasc(id, title: task.title, description: task.description, isCompleted: task.isCompleted, priority: task.priority, dueDate: task.dueDate);
 
     return Results.Ok(new { success = true, data = updated, message = "Operation completed successfully"});
 }); 

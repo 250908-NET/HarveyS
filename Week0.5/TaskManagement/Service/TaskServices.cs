@@ -1,9 +1,20 @@
 namespace taskManagement.service;
+using System.Text.RegularExpressions;
 using taskManagement.models;
 
 public class TaskService
 {
     private List<Tasc> theList = new List<Tasc>();
+
+    public bool isValidDate(string date)
+    {
+        string reg = @"^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$";
+        bool isValid = Regex.IsMatch(date, reg);
+        if(isValid || date == null || date == "") {
+            return true;
+        }
+        return false;
+    }
 
     public Tasc addToList(Tasc task)
     {
@@ -12,6 +23,7 @@ public class TaskService
         return newTask;
     }
 
+    //List all tasks, and if specified, sort them
     public List<Tasc> listItems(string sort)
     {
         List<Tasc> sortList = new List<Tasc>();
@@ -32,6 +44,7 @@ public class TaskService
         return sortList;
     }
 
+    //find any task by ID
     public Tasc findTask(int id)
     {
         foreach(Tasc i in theList) 
@@ -43,6 +56,7 @@ public class TaskService
         return null;
     }
 
+    //Update task values
     public Tasc? updateTasc(int id, string? title = null, string? description = null, bool? isCompleted = null, Prio? priority = null, string? dueDate = null)
     {
         Tasc task = findTask(id);
@@ -67,17 +81,19 @@ public class TaskService
         }
         if(dueDate != null && dueDate != "")
         {
-            task.dueDate = DateTime.Parse(dueDate);
+            task.dueDate = dueDate;
         }
+        task.UpdatedAt = DateTime.Now;
 
-        theList[id] = task;
+        theList[id-1] = task;
 
         return task;
     }
 
+    //Remove a task from the list
     public string deleteTask(int id)
     {
-        string deletedTask = theList[id].title;
+        string deletedTask = theList[id-1].title;
         theList.Remove(theList[id-1]);
         return deletedTask;
     }

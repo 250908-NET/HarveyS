@@ -14,7 +14,7 @@ public enum Prio
 public class Tasc
 {
     private static int currentId = 0;
-    public int ID { get; set; }
+    public int ID { get; }
     [Required]
     [MaxLength(100)]
     public string title { get; set; }
@@ -22,7 +22,7 @@ public class Tasc
     public string? description { get; set; }
     public bool isCompleted { get; set; }
     public Prio priority { get; set; }
-    public DateTime? dueDate { get; set; }
+    public string? dueDate { get; set; }
     public DateTime CreatedAt { get; }
     public DateTime UpdatedAt { get; set; }
 
@@ -30,15 +30,13 @@ public class Tasc
     {
         this.ID = currentId;
         title = "Default Task";
-        description = "Does stuff";
         isCompleted = false;
-        //priority priority = priority.Low;
-        dueDate = DateTime.Today.AddDays(7);
+        priority = 0;
         CreatedAt = DateTime.Now;
 
     }
 
-    public Tasc(string title, string description, bool isCompleted, Prio priority, DateTime? dueDate) //priority priority, DateTime? dueDate
+    public Tasc(string title, string description, bool isCompleted, Prio priority, string? dueDate) //priority priority, DateTime? dueDate
     {
         this.ID = Interlocked.Increment(ref currentId);
         this.title = title;

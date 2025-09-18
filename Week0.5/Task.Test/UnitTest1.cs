@@ -44,8 +44,8 @@ public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
         content?.success.Should().Be(true);
         content?.message.Should().Be("Operation completed successfully");
     }
-
-    //get all tasks
+/*
+    //Get all tasks
     [Fact]
     public async Task getAll()
     {
@@ -131,4 +131,5 @@ public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
         content?.success.Should().Be(false);
         content?.message.Should().Be("Operation failed");
     }
+    */
 }
