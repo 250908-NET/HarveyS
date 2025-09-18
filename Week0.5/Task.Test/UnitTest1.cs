@@ -79,12 +79,12 @@ public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task findTask()
     {
-        var task0 = new { title = "Make unit tests", description = "Write this code"};
-        var task1 = new { title = "Make unit tests again", description = "Write this code again"};
+        var task1 = new { title = "Make unit tests", description = "Write this code"};
+        var task2 = new { title = "Make unit tests again", description = "Write this code again"};
 
-        var response0 = await _client.PostAsJsonAsync("/api/tasks", task0);
         var response1 = await _client.PostAsJsonAsync("/api/tasks", task1);
-        var response = await _client.GetAsync("/api/tasks/1");
+        var response2 = await _client.PostAsJsonAsync("/api/tasks", task2);
+        var response = await _client.GetAsync("/api/tasks/2");
         
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await response.Content.ReadFromJsonAsync<PassResponse>();

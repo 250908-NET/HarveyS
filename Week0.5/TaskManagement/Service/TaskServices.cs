@@ -5,6 +5,7 @@ public class TaskService
 {
     private List<Tasc> theList = new List<Tasc>();
 
+    //Create a new task object, using this constructor generates a unique ID
     public Tasc addToList(Tasc task)
     {
         Tasc newTask = new Tasc(task.title, task.description, task.isCompleted, task.priority, task.dueDate);
@@ -12,6 +13,7 @@ public class TaskService
         return newTask;
     }
 
+    //List items, if a keyword representing a sorting order is specified, order the list in the way
     public List<Tasc> listItems(string sort)
     {
         List<Tasc> sortList = new List<Tasc>();
@@ -32,6 +34,7 @@ public class TaskService
         return sortList;
     }
 
+    //Iterate through list, if object is not found, return null, checks entire list without out of bounds exception
     public Tasc findTask(int id)
     {
         foreach(Tasc i in theList) 
@@ -43,6 +46,7 @@ public class TaskService
         return null;
     }
 
+    //Find task object, then update it
     public Tasc? updateTasc(int id, string? title = null, string? description = null, bool? isCompleted = null, Prio? priority = null, string? dueDate = null)
     {
         Tasc task = findTask(id);
@@ -70,14 +74,15 @@ public class TaskService
             task.dueDate = DateTime.Parse(dueDate);
         }
 
-        theList[id] = task;
+        theList[id-1] = task;
 
         return task;
     }
 
+    //Delete a task from the list, does not update any ID
     public string deleteTask(int id)
     {
-        string deletedTask = theList[id].title;
+        string deletedTask = theList[id-1].title;
         theList.Remove(theList[id-1]);
         return deletedTask;
     }

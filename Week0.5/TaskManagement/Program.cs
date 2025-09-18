@@ -27,10 +27,10 @@ app.UseHttpsRedirection();
 
 TaskService service = new TaskService();
 
-app.MapGet("/", () => 
-{
-    return "hello world!";
-});
+
+
+// -------- Endpoints! ----------
+
 //Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
 app.MapGet("/api/tasks", ([FromQuery] string? sort) =>
 {

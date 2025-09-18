@@ -2,7 +2,6 @@ namespace taskManagement.models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 public enum Prio 
 {
     Low,
@@ -14,7 +13,7 @@ public enum Prio
 public class Tasc
 {
     private static int currentId = 0;
-    public int ID { get; set; }
+    public int ID { get; }
     [Required]
     [MaxLength(100)]
     public string title { get; set; }
@@ -30,9 +29,9 @@ public class Tasc
     {
         this.ID = currentId;
         title = "Default Task";
-        description = "Does stuff";
+        description = "No description";
         isCompleted = false;
-        //priority priority = priority.Low;
+        priority = 0;
         dueDate = DateTime.Today.AddDays(7);
         CreatedAt = DateTime.Now;
 
