@@ -27,10 +27,14 @@ app.UseHttpsRedirection();
 
 TaskService service = new TaskService();
 
-//Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
-app.MapGet("/api/tasks", ([FromQuery] string? sort, ILogger<Program> logger) =>
+app.MapGet("/", () => 
 {
-    if(sort != "priority" && sort != "Priority" && sort != "Completed" && sort != "completed" && sort != "dueDate" && sort != "duedate") {
+    return "hello world!";
+});
+//Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
+app.MapGet("/api/tasks", ([FromQuery] string? sort) =>
+{
+    if(sort != null && sort != "" && sort != "priority" && sort != "Priority" && sort != "Completed" && sort != "completed" && sort != "dueDate" && sort != "duedate") {
         return Results.BadRequest(new { success = false, data = "Invalid sort method [Priority, Completed, dueDate]", message = "Operation failed" });
     }
     if(service.listItems(sort) == null)
@@ -80,3 +84,5 @@ app.MapDelete("/api/tasks/{id}", (int id) =>
 });
 
 app.Run();
+
+public partial class Program {};

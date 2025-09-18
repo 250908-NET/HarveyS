@@ -2,8 +2,17 @@
 using FluentAssertions;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net.Http.Json;
 
 namespace Web.Test;
+
+public class Response
+{
+    public bool? success { set; get; }
+    //public string? error { set; get; }
+    public string? message { set; get; }
+    //public Tasc? task { set; get; }
+}
 
 public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -14,31 +23,44 @@ public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
         _client = factory.CreateClient();
     }
 
+    // ----------- Testing all endpoints ------------
+    
+
     [Fact]
-    public async Task TestingAPositive()
+    public async Task createTask()
     {
-        // Arrange - the setup
-        // client created
+        var task = new { title = "Make unit tests", description = "Write this code"};
+
+        var response = await _client.PostAsJsonAsync("/api/tasks", task);
         
-        // Act - the execution
-        var response = await _client.GetAsync("/");
-
-        // Assert - compare and validate
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var content = await response.Content.ReadAsStringAsync();
-        content.Should().Be("Hello World!");
+        var content = await response.Content.ReadFromJsonAsync<Response>();
+        content.success.Should().Be(true);
+        content.message.Should().Be("Operation completed successfully");
     }
 
     [Fact]
-    public async Task TestingANegative()
+    public async Task getAll()
     {
-        // Arrange - the setup
-        // client created
+        var response = await _client.GetAsync("/api/tasks");
+        
+        
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        // Act - the execution
-        var response = await _client.GetAsync("/");
-
-        // Assert - compare and validate
-        response.StatusCode.Should().NotBe(HttpStatusCode.NotFound);
+        var content = await response.Content.ReadFromJsonAsync<Response>();
+        
+        content.success.Should().Be(true);
+        content.message.Should().Be("Operation completed successfully");
     }
+    /*
+    {
+    "id": 0,
+    "title": "string",
+    "description": "string",
+    "isCompleted": true,
+    "priority": 0,
+    "dueDate": "2025-09-18T14:49:56.315Z",
+    "updatedAt": "2025-09-18T14:49:56.316Z"
+    }
+    */
 }
