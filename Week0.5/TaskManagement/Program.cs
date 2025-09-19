@@ -84,6 +84,14 @@ app.MapDelete("/api/tasks/{id}", (int id) =>
     return Results.Ok(new { success = true, data = service.deleteTask(id), message = "Operation completed successfully"});
 });
 
+app.MapGet("/api/tasks/statistics", () =>
+{
+    if(service.listItems(null, null, null, null, null) == null) {
+        return Results.BadRequest(new { success = false, data = "No stats to list", message = "Operation failed" });
+    }
+    return Results.Ok(new { success = true, data = service.stats(), message = "Operation completed successfully"});
+});
+
 app.Run();
 
 public partial class Program {};

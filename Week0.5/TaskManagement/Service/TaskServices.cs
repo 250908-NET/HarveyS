@@ -52,6 +52,8 @@ public class TaskService
             if(!sortList.Any()) {
                 return null;
             }
+        } else {
+            sortList = theList;
         }
 
         if((sort == "priority" || sort == "Priority" ) && theList.Count() >= 2) {
@@ -63,7 +65,7 @@ public class TaskService
         } else {
             return sortList;
         }
-        return sortList;
+        return theList;
     }
 
     //Iterate through list, if object is not found, return null, checks entire list without out of bounds exception
@@ -117,5 +119,26 @@ public class TaskService
         string deletedTask = theList[id-1].title;
         theList.Remove(theList[id-1]);
         return deletedTask;
+    }
+
+    public string stats() 
+    {
+        int crit = 0;
+        int high = 0;
+        int med = 0;
+        int low = 0;
+        int total = theList.Count;
+        int completed = listItems("completed", null, null, true, null).Count;
+        int overdue = listItems("dueBefore", null, DateTime.Now, null, null).Count;
+        if(listItems("priority", null, null, null, Prio.Critical) != null)
+            crit = listItems("priority", null, null, null, Prio.Critical).Count;
+        if(listItems("priority", null, null, null, Prio.High) != null)
+            high = listItems("priority", null, null, null, Prio.High).Count;
+        if(listItems("priority", null, null, null, Prio.Medium) != null)
+            med = listItems("priority", null, null, null, Prio.Medium).Count;
+        if(listItems("priority", null, null, null, Prio.Low) != null)
+            low = listItems("priority", null, null, null, Prio.Low).Count;
+
+        return $"Total Tasks = {total}  |  Completed Tasks = {completed}  |  Overdue Tasks = {overdue}  |  Critical Tasks = {crit}  |  High Tasks = {high}  |  Medium Tasks = {med}  |  Low Tasks = {low}";
     }
 }

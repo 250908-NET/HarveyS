@@ -131,4 +131,36 @@ public class ApiTest : IClassFixture<WebApplicationFactory<Program>>
         content?.success.Should().Be(false);
         content?.message.Should().Be("Operation failed");
     }
+
+    //Try to get statistics, with no tasks to get stats off of
+    [Fact]
+    public async Task ErrgetStats()
+    {
+        var response = await _client.GetAsync("/api/tasks/statistics");
+        
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<PassResponse>();
+        
+        content?.success.Should().Be(true);
+        content?.message.Should().Be("Operation completed successfully");
+    }
+
+    
+    //Create a task, get their stats
+    [Fact]
+    public async Task getStats()
+    {
+        var task2 = new { title = "Fix bugs", description = "Ensure unit tests pass"};
+
+        var response2 = await _client.PostAsJsonAsync("/api/tasks", task2);
+        var response = await _client.GetAsync("/api/tasks/statistics");
+        
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<PassResponse>();
+        
+        content?.success.Should().Be(true);
+        content?.message.Should().Be("Operation completed successfully");
+    }
 }
