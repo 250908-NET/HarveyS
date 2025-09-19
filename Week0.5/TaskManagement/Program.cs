@@ -30,7 +30,15 @@ TaskService service = new TaskService();
 
 // -------- Endpoints! ----------
 
-//Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
+
+/// <summary>
+/// Get all tasks with optional filtering
+/// </summary>
+/// <param name="filter">String used to identify filter type. (ie. only select "completed" tasks)</param>
+/// <param name="sort">String used to identify sort type. (ie. sort list by priority)</param>
+/// <param name="date">DateTime variable to be used alongside dueBefore, createdAt, and dueDate sort/filter options</param>
+/// <param name="completed">Bool object to be used alongside "completed" filter</param>
+/// <param name="priority">Priority enum to be used alongside priority filter</param>
 app.MapGet("/api/tasks", ([FromQuery] string? filter, string? sort, DateTime? date, bool? completed, Prio? priority) =>
 {   
     if(filter != null && filter != "" && filter != "completed" && filter != "Completed" && filter != "dueBefore" && filter != "duebefore" && filter != "priority" && filter != "Priority") {
@@ -45,7 +53,11 @@ app.MapGet("/api/tasks", ([FromQuery] string? filter, string? sort, DateTime? da
     return Results.Ok(new { success = true, data = service.listItems(filter, sort, date, completed, priority), message = "Operation completed successfully"});
 });
 
-//Get specific task by ID
+/// <summary>
+/// Get a task by ID
+/// </summary>
+/// <param name="id">Identification number</param>
+/// <returns>Returns Task response </returns>
 app.MapGet("/api/tasks/{id}", (int id) => 
 {
     if(service.findTask(id) == null) {
@@ -54,7 +66,12 @@ app.MapGet("/api/tasks/{id}", (int id) =>
     return Results.Ok(new { success = true, data = service.findTask(id), message = "Operation completed successfully"});
 });
 
-//Create new task
+/// <summary>
+/// Post a task
+/// </summary>
+/// <param name="id">Identification number</param>
+/// <param name="task">A task object with all required params and valid params (title, description [optional], isCompleted, priority, dueDate [optional]</param>
+/// <returns>Returns posted Task </returns>
 app.MapPost("/api/tasks", (Tasc task) => 
 {
     if(task == null) {
@@ -63,7 +80,12 @@ app.MapPost("/api/tasks", (Tasc task) =>
     return Results.Ok(new { success = true, data = service.addToList(task), message = "Operation completed successfully"});
 });
 
-//Update existing task
+/// <summary>
+/// Update a task
+/// </summary>
+/// <param name="id">Identification number to find the task for updating</param>
+/// <param name="task">A task object with all required params and valid params (title, description [optional], isCompleted, priority, dueDate [optional]</param>
+/// <returns>Returns updated Task </returns>
 app.MapPut("/api/tasks/{id}", (int id, [FromBody] Tasc task) => 
 {
     if(service.findTask(id) == null) {
@@ -75,7 +97,11 @@ app.MapPut("/api/tasks/{id}", (int id, [FromBody] Tasc task) =>
     return Results.Ok(new { success = true, data = updated, message = "Operation completed successfully"});
 }); 
 
-//Delete task
+/// <summary>
+/// Delete a task
+/// </summary>
+/// <param name="id">Identification number to find the task for updating</param>
+/// <returns>Returns the now deleted Task </returns>
 app.MapDelete("/api/tasks/{id}", (int id) => 
 { 
     if(service.findTask(id) == null) {
@@ -84,6 +110,10 @@ app.MapDelete("/api/tasks/{id}", (int id) =>
     return Results.Ok(new { success = true, data = service.deleteTask(id), message = "Operation completed successfully"});
 });
 
+/// <summary>
+/// Get statistics
+/// </summary>
+/// <returns>Returns amount of total tasks, completed tasks, overdue tasks, and each priority of task </returns>
 app.MapGet("/api/tasks/statistics", () =>
 {
     if(service.listItems(null, null, null, null, null) == null) {
