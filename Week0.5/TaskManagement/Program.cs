@@ -39,6 +39,7 @@ TaskService service = new TaskService();
 /// <param name="date">DateTime variable to be used alongside dueBefore, createdAt, and dueDate sort/filter options</param>
 /// <param name="completed">Bool object to be used alongside "completed" filter</param>
 /// <param name="priority">Priority enum to be used alongside priority filter</param>
+/// <returns>Returns filtered and sorted task list response </returns>
 app.MapGet("/api/tasks", ([FromQuery] string? filter, string? sort, DateTime? date, bool? completed, Prio? priority) =>
 {   
     if(filter != null && filter != "" && filter != "completed" && filter != "Completed" && filter != "dueBefore" && filter != "duebefore" && filter != "priority" && filter != "Priority") {
