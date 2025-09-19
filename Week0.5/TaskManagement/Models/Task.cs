@@ -22,8 +22,8 @@ public class Tasc
     public bool isCompleted { get; set; }
     public Prio priority { get; set; }
     public DateTime? dueDate { get; set; }
-    public DateTime CreatedAt { get; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime createdAt { get; }
+    public DateTime updatedAt { get; set; }
 
     public Tasc()
     {
@@ -33,7 +33,8 @@ public class Tasc
         isCompleted = false;
         priority = 0;
         dueDate = DateTime.Today.AddDays(7);
-        CreatedAt = DateTime.Now;
+        createdAt = DateTime.Now;
+        updatedAt = DateTime.Now;
 
     }
 
@@ -45,7 +46,8 @@ public class Tasc
         this.isCompleted = isCompleted;
         this.priority = priority;
         this.dueDate = dueDate;
-        this.CreatedAt = DateTime.Now;
+        this.createdAt = DateTime.Now;
+        this.updatedAt = DateTime.Now;
     }
     
     /*

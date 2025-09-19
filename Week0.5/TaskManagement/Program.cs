@@ -28,20 +28,21 @@ app.UseHttpsRedirection();
 TaskService service = new TaskService();
 
 
-
 // -------- Endpoints! ----------
 
 //Get all tasks with optional filtering - Query parameters: isCompleted, priority, dueBefore
-app.MapGet("/api/tasks", ([FromQuery] string? sort) =>
-{
-    if(sort != null && sort != "" && sort != "priority" && sort != "Priority" && sort != "Completed" && sort != "completed" && sort != "dueDate" && sort != "duedate") {
+app.MapGet("/api/tasks", ([FromQuery] string? filter, string? sort, DateTime? date, bool? completed, Prio? priority) =>
+{   
+    if(filter != null && filter != "" && filter != "completed" && filter != "Completed" && filter != "dueBefore" && filter != "duebefore" && filter != "priority" && filter != "Priority") {
+        return Results.BadRequest(new { success = false, data = "Invalid sort method [Completed, dueBefore, priority]", message = "Operation failed" });
+    }
+    if(sort != null && sort != "" && sort != "priority" && sort != "Priority" && sort != "created" && sort != "Created" && sort != "dueDate" && sort != "duedate") {
         return Results.BadRequest(new { success = false, data = "Invalid sort method [Priority, Completed, dueDate]", message = "Operation failed" });
     }
-    if(service.listItems(sort) == null)
-    {
+    if(service.listItems(filter, sort, date, completed, priority) == null) {
         return Results.BadRequest(new { success = false, data = "No tasks to list", message = "Operation failed" });
     }
-    return Results.Ok(new { success = true, data = service.listItems(sort), message = "Operation completed successfully"});
+    return Results.Ok(new { success = true, data = service.listItems(filter, sort, date, completed, priority), message = "Operation completed successfully"});
 });
 
 //Get specific task by ID

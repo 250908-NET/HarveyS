@@ -14,7 +14,7 @@ public class TaskService
     }
 
     //List items, if a keyword representing a sorting order is specified, order the list in the way
-    public List<Tasc> listItems(string sort)
+    public List<Tasc> listItems(string? filter, string? sort, DateTime? date, bool? completed, Prio? priority)
     {
         List<Tasc> sortList = new List<Tasc>();
         bool isEmpty = !theList.Any();
@@ -22,14 +22,46 @@ public class TaskService
         {
             return null;
         }
+        if((filter == "priority" || filter == "Priority" ) && theList.Count() >= 2) {
+            foreach(Tasc i in theList) 
+            {
+                if(i.priority == priority) {
+                    sortList.Add(i);
+                }
+            }
+            if(!sortList.Any()) {
+                return null;
+            }
+        } else if((filter == "completed" || filter == "Completed" ) && theList.Count() >= 2) {
+            foreach(Tasc i in theList) 
+            {
+                if(i.isCompleted == completed) {
+                    sortList.Add(i);
+                }
+            }
+            if(!sortList.Any()) {
+                return null;
+            }
+        } else if((filter == "duedate" || filter == "dueDate" ) && theList.Count() >= 2) {
+            foreach(Tasc i in theList) 
+            {
+                if(i.dueDate < date) {
+                    sortList.Add(i);
+                }
+            }
+            if(!sortList.Any()) {
+                return null;
+            }
+        }
+
         if((sort == "priority" || sort == "Priority" ) && theList.Count() >= 2) {
-            sortList = theList.OrderBy(theList => theList.priority).ToList();
-        } else if((sort == "completed" || sort == "Completed" ) && theList.Count() >= 2) {
-            sortList = theList.OrderBy(theList => theList.isCompleted).ToList();
-        } else if((sort == "duedate" || sort == "dueDate" ) && theList.Count() >= 2) {
-            sortList = theList.OrderBy(theList => theList.dueDate).ToList();
+            sortList = sortList.OrderBy(theList => theList.priority).ToList();
+        } else if((sort == "created" || sort == "Created" ) && theList.Count() >= 2) {
+            sortList = sortList.OrderBy(theList => theList.isCompleted).ToList();
+        } else if((sort == "dueDate" || sort == "dueDate" ) && theList.Count() >= 2) {
+            sortList = sortList.OrderBy(theList => theList.dueDate).ToList();
         } else {
-            return theList;
+            return sortList;
         }
         return sortList;
     }
@@ -51,7 +83,7 @@ public class TaskService
     {
         Tasc task = findTask(id);
 
-        task.UpdatedAt = DateTime.Now;
+        task.updatedAt = DateTime.Now;
 
         if (title != null && title != "") 
         {
