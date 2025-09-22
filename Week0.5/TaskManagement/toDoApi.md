@@ -193,3 +193,35 @@ Choose one:
 ---
 
 **Good luck! Remember to focus on clean, maintainable code and don't hesitate to ask questions during development.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "title": "Present the API",
+  "description": "Hope you enjoy!",
+  "isCompleted": false,
+  "priority": 3,
+  "dueDate": "2025-09-19"
+}
+
+
+
+
+
+
+
+
+
+
+
+
