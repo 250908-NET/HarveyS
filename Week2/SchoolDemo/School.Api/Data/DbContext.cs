@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using School.Models;
 
-
 namespace School.Data;
 
 public class SchoolDbContext : DbContext

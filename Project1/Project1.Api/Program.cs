@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using School.Data;
-using School.Models;
+using Space.Data;
+using Space.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +11,7 @@ string CS = File.ReadAllText("../connection_string.env");
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(CS));
+builder.Services.AddDbContext<SpaceDbContext>(options => options.UseSqlServer(CS));
 
 
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
