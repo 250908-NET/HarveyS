@@ -11,22 +11,31 @@
 -- BASIC CHALLENGES
 -- List all customers (full name, customer id, and country) who are not in the USA
 select * from Customer where Country <> 'USA'
+
 -- List all customers from Brazil
 select * from Customer where Country = 'Brazil'
+
 -- List all sales agents
 select * from Employee where Title = 'Sales Support Agent'
+
 -- Retrieve a list of all countries in billing addresses on invoices
 select distinct BillingCountry from Invoice
+
 -- Retrieve how many invoices there were in 2009, and what was the sales total for that year?
 select count("InvoiceId") as InvoicesFrom09, sum("total") as SalesTotal from Invoice where InvoiceDate < '2010-01-01' and InvoiceDate > '2008-12-31'
+
     -- (challenge: find the invoice count sales total for every year using one query)
 select year("InvoiceDate") as Year, sum("total") as SalesTotal from Invoice group by year("InvoiceDate")
+
 -- how many line items were there for invoice #37
 select InvoiceId, count("InvoiceLineId") as LineItems from InvoiceLine where InvoiceId = 37 group by InvoiceId
+
 -- how many invoices per country? BillingCountry  # of invoices -
 select BillingCountry, count("InvoiceId") as Invoices from Invoice group by BillingCountry
+
 -- Retrieve the total sales per country, ordered by the highest total sales first.
-select BillingCountry, sum("total") as SalesTotal from Invoice group by BillingCountry order by SalesTotal
+select BillingCountry, sum("total") as SalesTotal from Invoice group by BillingCountry order by SalesTotal desc
+
 
 -- JOINS CHALLENGES
 -- Every Album by Artist
@@ -71,23 +80,47 @@ select T1.FirstName, T1.LastName, CONCAT(SUBSTRING(T1.FirstName, 1, 1), SUBSTRIN
     from Customer T1, Customer T2
     where CONCAT(SUBSTRING(T1.FirstName, 1, 1), SUBSTRING(T1.LastName, 1, 1)) = CONCAT(SUBSTRING(T2.FirstName, 1, 1), SUBSTRING(T2.LastName, 1, 1)) and T1.CustomerId <> T2.CustomerId
 
+
 -- ADVACED CHALLENGES
 -- solve these with a mixture of joins, subqueries, CTE, and set operators.
 -- solve at least one of them in two different ways, and see if the execution
 -- plan for them is the same, or different.
 
 -- 1. which artists did not make any albums at all?
-select Artist.Name, count(Album.AlbumId) as AlbumCount
+select Artist.Name
     from Artist
-    full outer join Album on Artist.ArtistId = Album.ArtistId
-    where AlbumCount < 1 group by Artist.Name
+except
+select ARTIST.Name
+    from Artist
+    inner join Album on Artist.ArtistId = Album.ArtistId;  
 
 -- 2. which artists did not record any tracks of the Latin genre?
+select Artist.Name from Artist
+    except 
+select Artist.Name from Artist 
+    join Album
+        on Artist.ArtistId = Album.ArtistId
+    join Track
+        on Track.AlbumId = Album.AlbumId 
+    join Genre
+        on Genre.GenreId = Track.TrackId 
+    where Genre.Name = 'Latin';
 
 -- 3. which video track has the longest length? (use media type table)
+select top 1 Track.*
+    from Track
+    join MediaType
+        on Track.MediaTypeId = MediaType.MediaTypeId
+    where MediaType.Name = 'Protected MPEG-4 video file'
+    order by Milliseconds desc
 
 -- 4. find the names of the customers who live in the same city as the
 --    boss employee (the one who reports to nobody)
+select Customer.FirstName, Customer.LastName
+    from Customer
+    where City = (SELECT Employee.City
+        from Employee
+        where Employee.ReportsTo IS NUll)
 
 -- 5. how many audio tracks were bought by German customers, and what was
 --    the total price paid for them?
@@ -105,5 +138,9 @@ select Artist.Name, count(Album.AlbumId) as AlbumCount
 -- 3. update customer Aaron Mitchell's name to Robert Walter
 
 -- 4. delete one of the employees you inserted.
+delete from Employee
+    where EmployeeId = 11;
 
 -- 5. delete customer Robert Walter.
+delete from Customer
+    where FirstName = 'Robert' and LastName = 'Walter'
