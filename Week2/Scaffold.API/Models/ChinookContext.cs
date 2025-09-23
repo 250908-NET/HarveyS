@@ -6,7 +6,7 @@ namespace Scaffold.API.Models;
 
 public partial class ChinookContext : DbContext
 {
-    private string connectionString = File.ReadAllText("../ConnectionString.txt");
+    private string connectionString = File.ReadAllText("../ConnectionString.env");
     public ChinookContext()
     {
     }
