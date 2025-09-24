@@ -7,7 +7,7 @@ For this project, you'll create an ASP.NET Core MinimalAPI project, where the ap
 ## Requirements
 
 - [X] Project hosted on GitHub
-- [] README that describes the application and its functionalities
+- [X] README that describes the application and its functionalities
 - [] The application should be ASP.NET Core Minimal API application
 - [] The application should build and run
 - [] The application should have unit tests and at least 20% coverage
@@ -31,6 +31,6 @@ For this project, you'll create an ASP.NET Core MinimalAPI project, where the ap
 - [X] Repo setup
 - [] Minimal API and Xunit project setup and connected (at least one test written)
 - [X] Model(s) and Repo(s) layer file structure setup
-- [] At least 1 endpoint tie to a model
-- [] README.md
-- [] ERD
+- [X] At least 1 endpoint tie to a model
+- [X] README.md
+- [X] ERD
