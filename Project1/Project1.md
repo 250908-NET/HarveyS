@@ -29,7 +29,7 @@ For this project, you'll create an ASP.NET Core MinimalAPI project, where the ap
 ## Half-way Expectations (09/24/2025)
 
 - [X] Repo setup
-- [] Minimal API and Xunit project setup and connected (at least one test written)
+- [X] Minimal API and Xunit project setup and connected (at least one test written)
 - [X] Model(s) and Repo(s) layer file structure setup
 - [X] At least 1 endpoint tie to a model
 - [X] README.md

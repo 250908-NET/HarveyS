@@ -22,11 +22,17 @@ namespace Space.Repositories
         {
            throw new NotImplementedException();
         }
+        
+        public async Task<List<Planet>> GetPlanetsByIdAsync(int id)
+        {
+            //return await _context.Planets.Where( planets => star.id  == id);
+            throw new NotImplementedException();
+        }
 
         public Task AddAsync(Star star)
-        {
-           throw new NotImplementedException();
-        }
+      {
+         throw new NotImplementedException();
+      }
 
         public Task SaveChangesAsync()
         {

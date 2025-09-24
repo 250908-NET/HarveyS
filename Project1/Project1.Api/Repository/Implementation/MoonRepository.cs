@@ -24,6 +24,12 @@ namespace Space.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<Planet?> GetPlanetByIdAsync(int id)
+        {
+            //return await _context.Moons.Where( planet => moon.id  == id);
+            throw new NotImplementedException();
+        }
+
         public async Task AddAsync(Moon moon)
         {
             await _context.Moons.AddAsync(moon);

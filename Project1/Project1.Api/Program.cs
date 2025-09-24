@@ -53,4 +53,46 @@ app.MapGet("/planets/{id}", async (IPlanetService service, int id) =>
     return planet is not null ? Results.Ok(planet) : Results.NotFound();
 });
 
+app.MapGet("/planets/moons/{id}", async (IPlanetService service, int id) =>
+{
+    var planet = await service.GetMoonsByIdAsync(id);
+    return planet is not null ? Results.Ok(planet) : Results.NotFound();
+});
+
+app.MapGet("/moons", async (IMoonService service) =>
+{
+    Results.Ok(await service.GetAllAsync());
+});
+
+app.MapGet("/moons/planet/{id}", async (IMoonService service, int id) => 
+{
+    var planet = await service.GetPlanetByIdAsync(id);
+    return planet is not null ? Results.Ok(planet) : Results.NotFound();
+});
+
+app.MapGet("/moons/{id}", async (IMoonService service, int id) =>
+{
+    var moon = await service.GetByIdAsync(id);
+    return moon is not null ? Results.Ok(moon) : Results.NotFound();
+});
+
+
+app.MapGet("/stars", async (IStarService service) =>
+{
+    Results.Ok(await service.GetAllAsync());
+});
+
+app.MapGet("/stars/{id}", async (IStarService service, int id) =>
+{
+    var star = await service.GetByIdAsync(id);
+    return star is not null ? Results.Ok(star) : Results.NotFound();
+});
+
+app.MapGet("/stars/planets/{id}", async (IStarService service, int id) =>
+{
+    var planets = await service.GetPlanetsByIdAsync(id);
+    return planets is not null ? Results.Ok(planets) : Results.NotFound();
+});
+
+
 app.Run();

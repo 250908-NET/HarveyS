@@ -16,6 +16,10 @@ namespace Space.Services
 
         public async Task<Moon?> GetByIdAsync(int id) => await _repo.GetByIdAsync(id);
 
+
+        public async Task<Planet?> GetPlanetByIdAsync(int id) => await _repo.GetPlanetByIdAsync(id);
+
+
         public async Task CreateAsync(Moon moon)
         {
             await _repo.AddAsync(moon);

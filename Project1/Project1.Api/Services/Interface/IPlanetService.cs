@@ -6,6 +6,7 @@ namespace Space.Services
     {
         public Task<List<Planet>> GetAllAsync();
         public Task<Planet?> GetByIdAsync(int id);
+        public Task<List<Moon>> GetMoonsByIdAsync(int id);
         public Task CreateAsync(Planet planet);
     }
 }
