@@ -15,5 +15,4 @@ public class Moon
     public string Description { get; set; }
     //public SolarSystem SolarSystem { get; set; }
     public Star star { get; set; }
-    List<Moon> Moons { get; set; } = new();
 }

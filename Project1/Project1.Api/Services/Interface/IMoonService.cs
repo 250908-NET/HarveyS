@@ -8,5 +8,8 @@ namespace Space.Services
         public Task<Moon?> GetByIdAsync(int id);
         public Task<Planet?> GetPlanetByIdAsync(int id);
         public Task<Moon> CreateAsync(Moon moon);
+        public Task UpdateAsync(int id, Moon moon);
+        public Task DeleteAsync(int id);
+        public Task<bool> Exists(int id);
     }
 }

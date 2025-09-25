@@ -9,10 +9,13 @@ namespace Space.Repositories
         private readonly SpaceDbContext _context;
 
         public MoonRepository(SpaceDbContext context) => _context = context;
+        public async Task<List<Moon>> GetAllAsync()
+        {
+            List<Moon> moons = await _context.Moons.ToListAsync();
+            return moons;
+        }
 
-        public async Task<List<Moon>> GetAllAsync() => await _context.Moons.Include(e => e.Name).Include(e => e.Planet).ToListAsync();
-
-        public async Task<Moon?> GetByIdAsync(int id) => await _context.Courses.Include(e => e.Name).Include(e => e.Planet).FirstOrDefaultAsync(e => e.Id == id);
+        public async Task<Moon?> GetByIdAsync(int id) => await _context.Moons.Include(e => e.Name).FirstOrDefaultAsync(e => e.Id == id);
 
         public async Task<Planet?> GetPlanetByIdAsync(int id)
         {
@@ -27,9 +30,24 @@ namespace Space.Repositories
             return moon;
         }
 
-        public async Task SaveChangesAsync()
+        public async Task UpdateAsync(int id, Moon moon) 
         {
+            _context.Moons.Update(moon);
             await _context.SaveChangesAsync();
         }
+    
+        public async Task DeleteAsync(int id) 
+        {
+            var moon = await _context.Moons.FindAsync(id);
+            _context.Moons.Remove(moon);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> Exists(int id) => await _context.Moons.AnyAsync(e => e.Id == id);
+
+        // public async Task SaveChangesAsync()
+        // {
+        //     await _context.SaveChangesAsync();
+        // }
     }
 }

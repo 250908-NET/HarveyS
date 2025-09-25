@@ -26,5 +26,17 @@ namespace Space.Services
             Moon createdMoon = await _repo.AddAsync(moon);
             return createdMoon;
         }
+
+        public async Task UpdateAsync(int id, Moon moon)
+        {
+            await _repo.UpdateAsync(id, moon);
+        }
+        public async Task DeleteAsync(int id)
+        {
+            await _repo.DeleteAsync(id);
+        }
+        
+        public async Task<bool> Exists(int id) => await _repo.Exists(id);
+
     }
 }

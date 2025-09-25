@@ -14,6 +14,6 @@ public class Planet
     [Required, MaxLength(50)]
     public string Description { get; set; }
     //public SolarSystem SolarSystem { get; set; }
-    public Star star { get; set; }
+    List<Star> stars { get; set; } = new();
     List<Moon> moons { get; set; } = new();
 }

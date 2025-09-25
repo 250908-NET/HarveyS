@@ -8,6 +8,9 @@ namespace Space.Repositories
         public Task<Moon?> GetByIdAsync(int id);
         public Task<Planet?> GetPlanetByIdAsync(int id);
         public Task<Moon> AddAsync(Moon moon);
-        public Task SaveChangesAsync();
+        public Task UpdateAsync(int id, Moon moon);
+        public Task DeleteAsync(int id);
+        public Task<bool> Exists(int id);
+        // public Task SaveChangesAsync();
     }
 }
