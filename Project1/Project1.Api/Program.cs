@@ -62,30 +62,30 @@ app.UseHttpsRedirection();
 
 // -------------------------- Moons -------------------------- //
 
-app.MapGet("/moons", async (IMoonService service) =>
+app.MapGet("/moons", async (ILogger<Program> logger, IMoonService service) =>
 {
     Results.Ok(await service.GetAllAsync());
 });
 
-app.MapGet("/moons/planet/{id}", async (IMoonService service, int id) => 
+app.MapGet("/moons/planet/{id}", async (ILogger<Program> logger, IMoonService service, int id) => 
 {
     var planet = await service.GetPlanetByIdAsync(id);
     return planet is not null ? Results.Ok(planet) : Results.NotFound();
 });
 
-app.MapGet("/moons/{id}", async (IMoonService service, int id) =>
+app.MapGet("/moons/{id}", async (ILogger<Program> logger, IMoonService service, int id) =>
 {
     var moon = await service.GetByIdAsync(id);
     return moon is not null ? Results.Ok(moon) : Results.NotFound();
 });
 
-app.MapPost("/moons", async (IMoonService service, Moon moon) =>
+app.MapPost("/moons", async (ILogger<Program> logger, IMoonService service, Moon moon) =>
 {
     var createdMoon = await service.CreateAsync(moon);
-    return Results.Created($"/moons/{createdMoon.Id}", createdMoon);
+    return Results.Created($"/moons/{createdMoon.MoonId}", createdMoon);
 });
 
-app.MapPut("/moons/{id}", async (IMoonService service, int id, Moon moon) =>
+app.MapPut("/moons/{id}", async (ILogger<Program> logger, IMoonService service, int id, Moon moon) =>
 {
     // if (! await service.Exists(id)) 
     // {

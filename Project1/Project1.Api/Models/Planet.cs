@@ -6,7 +6,7 @@ namespace Space.Models;
 public class Planet
 {
     [Key]
-    public int Id { get; set; }
+    public int PlanetId { get; set; }
     
     [Required, MaxLength(50)]
     public string Name { get; set; }

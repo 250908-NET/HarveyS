@@ -6,13 +6,12 @@ namespace Space.Models;
 public class Moon
 {
     [Key]
-    public int Id { get; set; }
+    public int MoonId { get; set; }
     
     [Required, MaxLength(50)]
     public string Name { get; set; }
     
     [Required, MaxLength(50)]
     public string Description { get; set; }
-    //public SolarSystem SolarSystem { get; set; }
-    public Star star { get; set; }
+    public Planet planet { get; set; }
 }

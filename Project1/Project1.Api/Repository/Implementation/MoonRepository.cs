@@ -15,7 +15,7 @@ namespace Space.Repositories
             return moons;
         }
 
-        public async Task<Moon?> GetByIdAsync(int id) => await _context.Moons.Include(e => e.Name).FirstOrDefaultAsync(e => e.Id == id);
+        public async Task<Moon?> GetByIdAsync(int id) => await _context.Moons.FirstOrDefaultAsync(e => e.MoonId == id);
 
         public async Task<Planet?> GetPlanetByIdAsync(int id)
         {
@@ -43,7 +43,7 @@ namespace Space.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> Exists(int id) => await _context.Moons.AnyAsync(e => e.Id == id);
+        public async Task<bool> Exists(int id) => await _context.Moons.AnyAsync(e => e.MoonId == id);
 
         // public async Task SaveChangesAsync()
         // {

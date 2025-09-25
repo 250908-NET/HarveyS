@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Space.Data;
 
@@ -10,9 +11,11 @@ using Space.Data;
 namespace Project1.Api.Migrations
 {
     [DbContext(typeof(SpaceDbContext))]
-    partial class SpaceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925201708_Moon model update")]
+    partial class Moonmodelupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,11 +26,11 @@ namespace Project1.Api.Migrations
 
             modelBuilder.Entity("Space.Models.Moon", b =>
                 {
-                    b.Property<int>("MoonId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MoonId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -39,23 +42,23 @@ namespace Project1.Api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("PlanetId")
+                    b.Property<int>("planetId")
                         .HasColumnType("int");
 
-                    b.HasKey("MoonId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PlanetId");
+                    b.HasIndex("planetId");
 
                     b.ToTable("Moons");
                 });
 
             modelBuilder.Entity("Space.Models.Planet", b =>
                 {
-                    b.Property<int>("PlanetId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanetId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -67,18 +70,18 @@ namespace Project1.Api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("PlanetId");
+                    b.HasKey("Id");
 
                     b.ToTable("Planets");
                 });
 
             modelBuilder.Entity("Space.Models.Star", b =>
                 {
-                    b.Property<int>("StarId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StarId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -90,7 +93,7 @@ namespace Project1.Api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("StarId");
+                    b.HasKey("Id");
 
                     b.ToTable("Stars");
                 });
@@ -99,7 +102,7 @@ namespace Project1.Api.Migrations
                 {
                     b.HasOne("Space.Models.Planet", "planet")
                         .WithMany()
-                        .HasForeignKey("PlanetId")
+                        .HasForeignKey("planetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
