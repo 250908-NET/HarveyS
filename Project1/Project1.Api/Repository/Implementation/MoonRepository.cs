@@ -8,21 +8,11 @@ namespace Space.Repositories
     {
         private readonly SpaceDbContext _context;
 
-        public MoonRepository(SpaceDbContext context)
-        {
-            _context = context;
-        }
+        public MoonRepository(SpaceDbContext context) => _context = context;
 
-        public async Task<List<Moon>> GetAllAsync()
-        {
-           return await _context.Moons.ToListAsync();
-        }
+        public async Task<List<Moon>> GetAllAsync() => await _context.Moons.Include(e => e.Name).Include(e => e.Planet).ToListAsync();
 
-        public async Task<Moon?> GetByIdAsync(int id)
-        {
-            //return await _context.Moons.Where( moon => moon.id  == id);
-            throw new NotImplementedException();
-        }
+        public async Task<Moon?> GetByIdAsync(int id) => await _context.Courses.Include(e => e.Name).Include(e => e.Planet).FirstOrDefaultAsync(e => e.Id == id);
 
         public async Task<Planet?> GetPlanetByIdAsync(int id)
         {
@@ -30,9 +20,11 @@ namespace Space.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task AddAsync(Moon moon)
+        public async Task<Moon> AddAsync(Moon moon)
         {
-            await _context.Moons.AddAsync(moon);
+            _context.Moons.Add(moon);
+            await _context.SaveChangesAsync();
+            return moon;
         }
 
         public async Task SaveChangesAsync()

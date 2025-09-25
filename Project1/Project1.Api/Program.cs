@@ -41,6 +41,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// -------------------------- Planets -------------------------- //
 
 app.MapGet("/planets", async (IPlanetService service) => 
 {
@@ -59,6 +60,8 @@ app.MapGet("/planets/moons/{id}", async (IPlanetService service, int id) =>
     return planet is not null ? Results.Ok(planet) : Results.NotFound();
 });
 
+// -------------------------- Moons -------------------------- //
+
 app.MapGet("/moons", async (IMoonService service) =>
 {
     Results.Ok(await service.GetAllAsync());
@@ -76,6 +79,14 @@ app.MapGet("/moons/{id}", async (IMoonService service, int id) =>
     return moon is not null ? Results.Ok(moon) : Results.NotFound();
 });
 
+app.MapPost("/moons", async (IMoonService service, Moon moon) =>
+{
+    var createdMoon = await service.CreateAsync(moon);
+    return Results.Created($"/moons/{createdMoon.Id}", createdMoon);
+});
+
+
+// -------------------------- Stars -------------------------- //
 
 app.MapGet("/stars", async (IStarService service) =>
 {

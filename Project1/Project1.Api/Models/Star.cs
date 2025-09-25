@@ -6,6 +6,7 @@ namespace Space.Models;
 public class Star
 {
     //Lets use defaults here
+    [Key]
     public int Id { get; set; }
 
     [Required, MaxLength(50)]

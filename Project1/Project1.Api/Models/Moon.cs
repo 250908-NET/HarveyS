@@ -5,6 +5,7 @@ namespace Space.Models;
 
 public class Moon
 {
+    [Key]
     public int Id { get; set; }
     
     [Required, MaxLength(50)]

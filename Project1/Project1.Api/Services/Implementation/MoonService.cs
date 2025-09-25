@@ -9,6 +9,7 @@ namespace Space.Services
 
         public MoonService(IMoonRepository repo)
         {
+            if (repo == null) throw new ArgumentNullException(nameof(repo));
             _repo = repo;
         }
 
@@ -20,10 +21,10 @@ namespace Space.Services
         public async Task<Planet?> GetPlanetByIdAsync(int id) => await _repo.GetPlanetByIdAsync(id);
 
 
-        public async Task CreateAsync(Moon moon)
+        public async Task<Moon> CreateAsync(Moon moon)
         {
-            await _repo.AddAsync(moon);
-            await _repo.SaveChangesAsync();
+            Moon createdMoon = await _repo.AddAsync(moon);
+            return createdMoon;
         }
     }
 }
