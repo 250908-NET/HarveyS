@@ -6,6 +6,4 @@ This is an application that will be able to access, record, and retrieve data ab
 
 ## How to use
 
-You can search for any type of object, list their information, and find out which system and object they orbit.
-
-This application lets you find celestial objects within specifications by their size, length of year(if a planet), date discovered, and other statistics, to plan your vacation of course
+You can search for any type of object, list their information, and find out which system and object they orbit so you can plan out your vacation!

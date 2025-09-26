@@ -179,3 +179,6 @@ app.MapDelete("/stars/{id}", async (IStarService service, int id) =>
 
 
 app.Run();
+
+
+public partial class Program {};
