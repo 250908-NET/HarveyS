@@ -8,35 +8,48 @@ namespace Space.Repositories
     {
         private readonly SpaceDbContext _context;
 
-        public PlanetRepository(SpaceDbContext context)
+        public PlanetRepository(SpaceDbContext context) => _context = context;
+
+        public async Task<List<Planet>> GetAllAsync()
         {
-            _context = context;
+            List<Planet> planets = await _context.Planets.Include(e => e.moons).Include(e => e.stars).ToListAsync();
+            return planets;
         }
 
-        public Task<List<Planet>> GetAllAsync()
-        {
-           throw new NotImplementedException();
-        }
+        public async Task<Planet?> GetByIdAsync(int id) => await _context.Planets.FirstOrDefaultAsync(e => e.PlanetId == id);
 
-        public Task<Planet?> GetByIdAsync(int id)
+        public async Task<List<Moon>> GetMoonsByIdAsync(int id)
         {
-           throw new NotImplementedException();
-        }
-
-        public Task<List<Moon>> GetMoonsByIdAsync(int id)
-        {
-            //return await _context.Planets.Where( moons => planet.id  == id);
-            throw new NotImplementedException();
+            List<Moon> moons = await _context.Moons.Where(e => e.planet.PlanetId == id).ToListAsync();
+            return moons;
         }
         
-        public Task AddAsync(Planet planet)
-      {
-         throw new NotImplementedException();
-      }
-
-        public Task SaveChangesAsync()
+        public async Task<List<Star>> GetStarsByIdAsync(int id)
         {
-           throw new NotImplementedException();
+            Planet thisPlanet = await _context.Planets.FirstOrDefaultAsync(e => e.PlanetId == id);
+            return thisPlanet.stars;
         }
+        
+        public async Task<Planet> AddAsync(Planet planet)
+        {
+            _context.Planets.Add(planet);
+            await _context.SaveChangesAsync();
+            return planet;
+        }
+
+        public async Task UpdateAsync(int id, Planet planet) 
+        {
+            _context.Planets.Update(planet);
+            await _context.SaveChangesAsync();
+        }
+    
+        public async Task DeleteAsync(int id) 
+        {
+            var planet = await _context.Planets.FindAsync(id);
+            _context.Planets.Remove(planet);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> Exists(int id) => await _context.Planets.AnyAsync(e => e.PlanetId == id);
     }
 }

@@ -13,30 +13,39 @@ namespace Space.Repositories
             _context = context;
         }
 
-        public Task<List<Star>> GetAllAsync()
+        public async Task<List<Star>> GetAllAsync()
         {
-           throw new NotImplementedException();
+            List<Star> stars = await _context.Stars.Include(e => e.Planets).ToListAsync();
+            return stars;
         }
 
-        public Task<Star?> GetByIdAsync(int id)
-        {
-           throw new NotImplementedException();
-        }
+        public async Task<Star?> GetByIdAsync(int id) => await _context.Stars.FirstOrDefaultAsync(e => e.StarId == id);
         
         public async Task<List<Planet>> GetPlanetsByIdAsync(int id)
         {
-            //return await _context.Planets.Where( planets => star.id  == id);
-            throw new NotImplementedException();
+            Star thisStar = await _context.Stars.FirstOrDefaultAsync(e => e.StarId == id);
+            return thisStar.Planets;
         }
-
-        public Task AddAsync(Star star)
-      {
-         throw new NotImplementedException();
-      }
-
-        public Task SaveChangesAsync()
+        public async Task<Star> AddAsync(Star star)
         {
-           throw new NotImplementedException();
+            _context.Stars.Add(star);
+            await _context.SaveChangesAsync();
+            return star;
         }
+
+        public async Task UpdateAsync(int id, Star star) 
+        {
+            _context.Stars.Update(star);
+            await _context.SaveChangesAsync();
+        }
+    
+        public async Task DeleteAsync(int id) 
+        {
+            var star = await _context.Stars.FindAsync(id);
+            _context.Stars.Remove(star);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> Exists(int id) => await _context.Stars.AnyAsync(e => e.StarId == id);
     }
 }

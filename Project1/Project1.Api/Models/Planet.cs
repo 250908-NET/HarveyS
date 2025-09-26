@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Space.Models;
@@ -13,7 +14,8 @@ public class Planet
     
     [Required, MaxLength(50)]
     public string Description { get; set; }
-    //public SolarSystem SolarSystem { get; set; }
-    List<Star> stars { get; set; } = new();
-    List<Moon> moons { get; set; } = new();
+    [JsonIgnore]
+    public List<Star> stars { get; set; } = new();
+    [JsonIgnore]
+    public List<Moon> moons { get; set; } = new();
 }

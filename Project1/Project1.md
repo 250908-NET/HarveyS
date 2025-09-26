@@ -8,16 +8,16 @@ For this project, you'll create an ASP.NET Core MinimalAPI project, where the ap
 
 - [X] Project hosted on GitHub
 - [X] README that describes the application and its functionalities
-- [] The application should be ASP.NET Core Minimal API application
+- [X] The application should be ASP.NET Core Minimal API application
 - [X] The application should build and run
 - [] The application should have unit tests and at least 20% coverage
-- [] The application should communicate via HTTP(s) (Must have POST, GET, DELETE)
+- [X] The application should communicate via HTTP(s) (Must have POST, GET, DELETE)
 - [X] Have 1 or more DTOs
 - [X] ERD of your models and the relationships between them
-- [] Have at least one many to many (m-m) relationship between the models in your app
+- [X] Have at least one many to many (m-m) relationship between the models in your app
 - [X] Have 2 or more models
 - [X] Persisting data to a SQL Server DB running in a Docker container
-- [] The application should communicate to DB via EF Core (Entity Framework Core)
+- [X] The application should communicate to DB via EF Core (Entity Framework Core)
 
 ## Presentation
 

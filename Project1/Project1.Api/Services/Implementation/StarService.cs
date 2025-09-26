@@ -18,10 +18,22 @@ namespace Space.Services
         
         public async Task<List<Planet>> GetPlanetsByIdAsync(int id) => await _repo.GetPlanetsByIdAsync(id);
 
-        public async Task CreateAsync(Star star)
+        
+        public async Task<Star> CreateAsync(Star star)
         {
-            await _repo.AddAsync(star);
-            await _repo.SaveChangesAsync();
+            Star createdStar = await _repo.AddAsync(star);
+            return createdStar;
         }
+
+        public async Task UpdateAsync(int id, Star star)
+        {
+            await _repo.UpdateAsync(id, star);
+        }
+        public async Task DeleteAsync(int id)
+        {
+            await _repo.DeleteAsync(id);
+        }
+        
+        public async Task<bool> Exists(int id) => await _repo.Exists(id);
     }
 }

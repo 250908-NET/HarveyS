@@ -7,7 +7,9 @@ namespace Space.Repositories
         public Task<List<Star>> GetAllAsync();
         public Task<Star?> GetByIdAsync(int id);
         public Task<List<Planet>> GetPlanetsByIdAsync(int id);
-        public Task AddAsync(Star star);
-        public Task SaveChangesAsync();
+        public Task<Star> AddAsync(Star star);
+        public Task UpdateAsync(int id, Star star);
+        public Task DeleteAsync(int id);
+        public Task<bool> Exists(int id);
     }
 }

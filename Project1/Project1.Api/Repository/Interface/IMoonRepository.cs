@@ -11,6 +11,5 @@ namespace Space.Repositories
         public Task UpdateAsync(int id, Moon moon);
         public Task DeleteAsync(int id);
         public Task<bool> Exists(int id);
-        // public Task SaveChangesAsync();
     }
 }
