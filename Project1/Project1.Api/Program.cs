@@ -46,25 +46,25 @@ app.UseHttpsRedirection();
 app.MapGet("/planets", async (IPlanetService service) => 
 {
     List<Planet> planets = await service.GetAllAsync();
-    return Results.Ok(planets);
+    return Results.Ok(new { message = "Planets recovered successfully", data = planets});
 });
 
 app.MapGet("/planets/{id}", async (IPlanetService service, int id) =>
 {
     var planet = await service.GetByIdAsync(id);
-    return planet is not null ? Results.Ok(planet) : Results.NotFound();
+    return planet is not null ? Results.Ok(new { message = "Planet recovered successfully", data = planet }) : Results.NotFound();
 });
 
 app.MapGet("/planets/moons/{id}", async (IPlanetService service, int id) =>
 {
     var moons = await service.GetMoonsByIdAsync(id);
-    return moons is not null ? Results.Ok(moons) : Results.NotFound();
+    return moons is not null ? Results.Ok(new { message = "Moons recovered successfully", data = moons }) : Results.NotFound();
 });
 
 app.MapGet("/planets/stars/{id}", async (IPlanetService service, int id) =>
 {
     var stars = await service.GetStarsByIdAsync(id);
-    return stars is not null ? Results.Ok(stars) : Results.NotFound();
+    return stars is not null ? Results.Ok(new { message = "Stars recovered successfully", data = stars }) : Results.NotFound();
 });
 
 app.MapPost("/planets", async (ILogger<Program> logger, IPlanetService service, Planet planet) =>
@@ -81,7 +81,8 @@ app.MapPut("/planets/{id}", async (ILogger<Program> logger, IPlanetService servi
     }
 
     await service.UpdateAsync(id, planet);
-    return Results.Ok(await service.GetByIdAsync(id));
+    var updatedPlanet = await service.GetByIdAsync(id);
+    return Results.Ok(new { message = "Planet updated successfully", data = updatedPlanet } );
 });
 
 app.MapDelete("/planets/{id}", async (IPlanetService service, int id) =>
@@ -95,19 +96,19 @@ app.MapDelete("/planets/{id}", async (IPlanetService service, int id) =>
 app.MapGet("/moons", async (ILogger<Program> logger, IMoonService service) =>
 {
     List<Moon> moons = await service.GetAllAsync();
-    return Results.Ok(moons);
+    return Results.Ok(new { message = "Moons recovered successfully", data = moons});
 });
 
 app.MapGet("/moons/planet/{id}", async (ILogger<Program> logger, IMoonService service, int id) => 
 {
     var planet = await service.GetPlanetByIdAsync(id);
-    return planet is not null ? Results.Ok(planet) : Results.NotFound();
+    return planet is not null ? Results.Ok(new { message = "Planet recovered successfully", data = planet }) : Results.NotFound();
 });
 
 app.MapGet("/moons/{id}", async (ILogger<Program> logger, IMoonService service, int id) =>
 {
     var moon = await service.GetByIdAsync(id);
-    return moon is not null ? Results.Ok(moon) : Results.NotFound();
+    return moon is not null ? Results.Ok(new { message = "Moon recovered successfully", data = moon }) : Results.NotFound();
 });
 
 app.MapPost("/moons", async (ILogger<Program> logger, IMoonService service, Moon moon) =>
@@ -139,19 +140,19 @@ app.MapDelete("/moons/{id}", async (IMoonService service, int id) =>
 app.MapGet("/stars", async (IStarService service) =>
 {
     List<Star> stars = await service.GetAllAsync();
-    return Results.Ok(stars);
+    return Results.Ok(new { message = "Stars recovered successfully", data = stars});
 });
 
 app.MapGet("/stars/{id}", async (IStarService service, int id) =>
 {
     var star = await service.GetByIdAsync(id);
-    return star is not null ? Results.Ok(star) : Results.NotFound();
+    return star is not null ? Results.Ok(new { message = "Star recovered successfully", data = star }) : Results.NotFound();
 });
 
 app.MapGet("/stars/planets/{id}", async (IStarService service, int id) =>
 {
     var planets = await service.GetPlanetsByIdAsync(id);
-    return planets is not null ? Results.Ok(planets) : Results.NotFound();
+    return planets is not null ? Results.Ok(new { message = "Planets recovered successfully", data = planets }) : Results.NotFound();
 });
 
 app.MapPost("/stars", async (ILogger<Program> logger, IStarService service, Star star) =>
